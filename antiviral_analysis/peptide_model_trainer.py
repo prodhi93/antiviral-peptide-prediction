@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-%matplotlib inline
 import seaborn as sns
 import numpy as np
 from datetime import datetime
@@ -31,8 +30,8 @@ class PeptideTrainer:
         
     def prep_train_test_data(self, inplace=True):
         scaler = MinMaxScaler()
-        X = np.array(data.drop("AV label",axis=1).values)
-        y = np.array(data["AV label"].values)
+        X = np.array(self.data.drop("AV label",axis=1).values)
+        y = np.array(self.data["AV label"].values)
         X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,shuffle=True,stratify=y)
         X_train = scaler.fit_transform(X_train)
         X_test = scaler.transform(X_test)
@@ -115,6 +114,7 @@ class PeptideTrainer:
         # Instantiate the grid search model
         grid_search = GridSearchCV(estimator = rfc_estimator, param_grid = param_grid, 
                           cv = 3, n_jobs = -1, verbose = 1)
+        grid_search.fit(X_train, y_train)
         rfc = grid_search.best_estimator_
         rfc.fit(X_train, y_train)
         if inplace:
