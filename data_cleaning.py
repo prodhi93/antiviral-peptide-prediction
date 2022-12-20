@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 get_ipython().run_line_magic('matplotlib', 'inline')
 from Bio import SeqIO
-from antiviral_analysis import Peptide_class, Taxonomy_extractor
+from antiviral_analysis import peptide_class, taxonomy_extractor
 
 # Read in CSV
 
@@ -129,7 +129,7 @@ amp.replace('Leishmania spp (promastigote)','Leishmania sp.',inplace=True)
 
 species_col = amp["TARGET ACTIVITY - TARGET SPECIES"]
 email = "prodhimanisha93@gmail.com"
-sk_dict = Taxonomy_extractor.superkingdom_id(species_col, email)
+sk_dict = taxonomy_extractor.superkingdom_id(species_col, email)
 
 amp["TARGET ACTIVITY - CELL TYPE"] = amp["TARGET ACTIVITY - TARGET SPECIES"].map(sk_dict)
 
@@ -147,17 +147,17 @@ amp = pd.concat([amp.drop(["TARGET ACTIVITY - TARGET SPECIES","TARGET ACTIVITY -
 # (particularly useful for making predictions off peptides where higher level
 # data from complex experiments are difficult to obtain)
 
-amp["HELIX"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).percent_helix())
-amp["TURN"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).percent_turn())
-amp["SHEET"]= amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).percent_sheet())
-amp["HYDROPHOBIC MOMENT"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).hydrophobic_moment())
-amp["SEQUENCE CHARGE"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).sequence_charge())
-amp["CHARGE DENSITY"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).charge_density())
-amp["ISOELECTRIC POINT"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).isoelectric_point())
-amp["INSTABILITY INDEX"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).instability_index())
-amp["AROMATICITY"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).aromaticity())
-amp["ALIPHATIC INDEX"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).aliphatic_index())
-amp["BOMAN INDEX"] = amp["SEQUENCE"].apply(lambda x: Peptide_class.Peptide(x).boman_index())
+amp["HELIX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).percent_helix())
+amp["TURN"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).percent_turn())
+amp["SHEET"]= amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).percent_sheet())
+amp["HYDROPHOBIC MOMENT"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).hydrophobic_moment())
+amp["SEQUENCE CHARGE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).sequence_charge())
+amp["CHARGE DENSITY"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).charge_density())
+amp["ISOELECTRIC POINT"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).isoelectric_point())
+amp["INSTABILITY INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).instability_index())
+amp["AROMATICITY"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).aromaticity())
+amp["ALIPHATIC INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).aliphatic_index())
+amp["BOMAN INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).boman_index())
 
 amp.to_csv('cleaned_amp.csv')
 
