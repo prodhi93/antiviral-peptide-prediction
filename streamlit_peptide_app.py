@@ -35,7 +35,7 @@ def extract_seq_data(sequence):
               pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge()])
     return data
     
-@st.cache
+    
 rfc_full = model_loader("smote_rfc_full_model.joblib")
 if synth_type=="Ribosomal":
     rfc = model_loader("smote_rfc_ribo_model.joblib")
