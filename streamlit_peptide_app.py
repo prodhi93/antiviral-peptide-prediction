@@ -24,7 +24,7 @@ min_length = int(min_length)
 
 
 @st.cache(suppress_st_warning=True)
-def model_loader(model_name_or_path->str):
+def model_loader(model_name_or_path):
     model = load(str(model_name_or_path))
     return model
 
