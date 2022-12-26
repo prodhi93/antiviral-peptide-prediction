@@ -33,7 +33,7 @@ def extract_seq_data(sequence):
     pep = Peptide(str(sequence))
     data = np.array([pep.percent_helix(), pep.aromaticity(), pep.percent_sheet(), pep.aliphatic_index(),
               pep.hydrophobic_moment(), pep.percent_turn(), pep.boman_index(), pep.instability_index(),
-              pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge()])
+              pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge()]).reshape(1, -1) 
     return data
     
     
