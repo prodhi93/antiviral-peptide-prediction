@@ -3,4 +3,4 @@ numpy==1.22.4
 joblib==1.0.1
 pandas==1.5.0
 modlamp==4.3.0
-Bio==1.79
+biopython==1.79
