@@ -24,7 +24,6 @@ min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1
 min_length = int(min_length)
 
 
-@st.cache(suppress_st_warning=True)
 def model_loader(model_name_or_path):
     model = load(str(model_name_or_path))
     return model
@@ -57,6 +56,14 @@ def get_truncated_data(seq, model, min_length):
         pred_list.append(model.predict_proba(data)[0][1])
     return seq_list, data_list, pred_list
 
+@st.cache(suppress_st_warning=True)
+rfc_full = model_loader("smote_rfc_full_model.joblib")
+if synth_type=="Ribosomal":
+    rfc = model_loader("smote_rfc_ribo_model.joblib")
+elif synth_type=="Synthetic":
+    rfc = model_loader("smote_rfc_synth_model.joblib")
+
+    
 seq_preds = get_truncated_data(seq, rfc, min_length)
 seq_preds_full = get_truncated_data(seq, rfc_full, min_length)
 
