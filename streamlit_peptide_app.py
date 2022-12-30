@@ -34,13 +34,6 @@ def extract_seq_data(sequence):
               pep.hydrophobic_moment(), pep.percent_turn(), pep.boman_index(), pep.instability_index(),
               pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge()]).reshape(1, -1) 
     return data
-    
-    
-rfc_full = model_loader("smote_rfc_full_model.joblib")
-if synth_type=="Ribosomal":
-    rfc = model_loader("smote_rfc_ribo_model.joblib")
-elif synth_type=="Synthetic":
-    rfc = model_loader("smote_rfc_synth_model.joblib")
 
 
 def get_truncated_data(seq, model, min_length):  
@@ -56,7 +49,7 @@ def get_truncated_data(seq, model, min_length):
         pred_list.append(model.predict_proba(data)[0][1])
     return seq_list, data_list, pred_list
 
-@st.cache(suppress_st_warning=True)
+    
 rfc_full = model_loader("smote_rfc_full_model.joblib")
 if synth_type=="Ribosomal":
     rfc = model_loader("smote_rfc_ribo_model.joblib")
