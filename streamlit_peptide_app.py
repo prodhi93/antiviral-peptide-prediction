@@ -72,10 +72,10 @@ df_full["Predicted Antiviral Probability"] = seq_preds_full[2]
 df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
 
 st.subheader(f"Using model trained on {synth_type} Peptides")
-st.dataframe(data=df, use_container_width=True)
+st.dataframe(data=df, width=200)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
-st.dataframe(data=df_full, use_container_width=True)
+st.dataframe(data=df_full, width=200)
 
 
 
