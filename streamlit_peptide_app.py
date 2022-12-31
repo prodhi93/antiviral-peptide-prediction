@@ -63,10 +63,10 @@ def customise_aggrid_df(data):
         gridOptions=gridOptions,
         data_return_mode='AS_INPUT', 
         update_mode='MODEL_CHANGED', 
-        fit_columns_on_grid_load=False,
+        fit_columns_on_grid_load=True,
         theme='streamlit', #Add theme color to the table
         enable_enterprise_modules=True,
-        height=500, 
+        height=350, 
         width='200%',
         reload_data=True
     )
