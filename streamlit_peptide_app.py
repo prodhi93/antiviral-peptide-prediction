@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from joblib import load
-from st_aggrid import gridOptions, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import plotly.graph_objects as go
 from antiviral_analysis.peptide_class import Peptide
 #import torch
@@ -51,6 +51,30 @@ def get_truncated_data(seq, model, min_length):
         pred_list.append(model.predict_proba(data)[0][1])
     return seq_list, data_list, pred_list
 
+def customise_aggrid_df(data):
+    gb = GridOptionsBuilder.from_dataframe(data)
+    gb.configure_pagination(paginationAutoPageSize=True) #Add pagination
+    gb.configure_side_bar() #Add a sidebar
+    gb.configure_selection('multiple', use_checkbox=True, groupSelectsChildren="Group checkbox select children") #Enable multi-row selection
+    gridOptions = gb.build()
+
+    grid_response = AgGrid(
+        data,
+        gridOptions=gridOptions,
+       data_return_mode='AS_INPUT', 
+        update_mode='MODEL_CHANGED', 
+        fit_columns_on_grid_load=False,
+        theme='blue', #Add theme color to the table
+        enable_enterprise_modules=True,
+        height=350, 
+        width='100%',
+        reload_data=True
+    )
+
+    data = grid_response['data']
+    selected = grid_response['selected_rows'] 
+    df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
+    return df
     
 rfc_full = model_loader("smote_rfc_full_model.joblib")
 if synth_type=="Ribosomal":
@@ -73,11 +97,12 @@ df_full = pd.DataFrame(seq_preds_full[0], columns=["Sequence"])
 df_full["Predicted Antiviral Probability"] = seq_preds_full[2]
 df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
 
-gridOptions.api.sizeColumnsToFit()
 st.subheader(f"Using model trained on {synth_type} Peptides")
 #st.dataframe(df)
 AgGrid(df)
+customise_aggrid_df(df)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
 #st.dataframe(df_full)
 AgGrid(df_full)
+customise_aggrid_df(df_full)
