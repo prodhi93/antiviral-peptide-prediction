@@ -12,7 +12,7 @@ seq = st.text_input('Enter sequence')
 
 #Picking which model user wants to deploy
 st.subheader("Is your peptide ribosomally synthesised (biologically occurring), or synthetic?")
-synth_type = st.selectbox('Synthesis Type',('Ribosomal', 'Synthetic')) 
+synth_type = st.radio('Synthesis Type',('Ribosomal', 'Synthetic')) 
 #option is stored in this variable
 
 st.subheader("Choose your threshold for positive antiviral activity")
