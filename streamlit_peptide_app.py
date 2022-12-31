@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from joblib import load
+import plotly.graph_objects as go
 from antiviral_analysis.peptide_class import Peptide
 #import torch
 
