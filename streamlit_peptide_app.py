@@ -2,7 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from joblib import load
-from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
+from st_aggrid import gridOptions, GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import plotly.graph_objects as go
 from antiviral_analysis.peptide_class import Peptide
 #import torch
@@ -73,6 +73,7 @@ df_full = pd.DataFrame(seq_preds_full[0], columns=["Sequence"])
 df_full["Predicted Antiviral Probability"] = seq_preds_full[2]
 df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
 
+gridOptions.api.sizeColumnsToFit()
 st.subheader(f"Using model trained on {synth_type} Peptides")
 #st.dataframe(df)
 AgGrid(df)
