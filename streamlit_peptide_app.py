@@ -67,7 +67,7 @@ def customise_aggrid_df(data):
         theme='streamlit', #Add theme color to the table
         enable_enterprise_modules=True,
         height=350, 
-        width='150%',
+        width='200%',
         reload_data=True
     )
 
