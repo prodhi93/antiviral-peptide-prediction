@@ -2,6 +2,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 from joblib import load
+from st_aggrid import GridOptionsBuilder, AgGrid, GridUpdateMode, DataReturnMode
 import plotly.graph_objects as go
 from antiviral_analysis.peptide_class import Peptide
 #import torch
@@ -74,26 +75,8 @@ df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].appl
 
 st.subheader(f"Using model trained on {synth_type} Peptides")
 #st.dataframe(df)
-fig = go.Figure(data=[go.Table(
-    header=dict(values=list(df.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=[df["Sequence"], df["Predicted Antiviral Probability"], df["Possible Antiviral?"]],
-               fill_color='lavender',
-               align='left'))
-])
-
-st.plotly_chart(fig, use_container_width=True)
+AgGrid(df)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
 #st.dataframe(df_full)
-fig_full = go.Figure(data=[go.Table(
-    header=dict(values=list(df_full.columns),
-                fill_color='paleturquoise',
-                align='left'),
-    cells=dict(values=[df_full["Sequence"], df_full["Predicted Antiviral Probability"], df_full["Possible Antiviral?"]],
-               fill_color='lavender',
-               align='left'))
-])
-
-st.plotly_chart(fig_full, use_container_width=True)
+AgGrid(df_full)
