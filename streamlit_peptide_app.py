@@ -72,10 +72,26 @@ df_full["Predicted Antiviral Probability"] = seq_preds_full[2]
 df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
 
 st.subheader(f"Using model trained on {synth_type} Peptides")
-st.dataframe(df)
+#st.dataframe(df)
+fig = go.Figure(data=[go.Table(
+    header=dict(values=list(df.columns),
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[df["Sequence"], df["Predicted Antiviral Probability"], df["Possible Antiviral?"]],
+               fill_color='lavender',
+               align='left'))
+])
+
+st.plotly_chart(fig)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
-st.dataframe(df_full)
+#st.dataframe(df_full)
+fig_full = go.Figure(data=[go.Table(
+    header=dict(values=list(df_full.columns),
+                fill_color='paleturquoise',
+                align='left'),
+    cells=dict(values=[df_full["Sequence"], df_full["Predicted Antiviral Probability"], df_full["Possible Antiviral?"]],
+               fill_color='lavender',
+               align='left'))
 
-
-
+st.plotly_chart(fig_full)
