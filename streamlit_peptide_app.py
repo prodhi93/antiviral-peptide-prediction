@@ -83,7 +83,7 @@ fig = go.Figure(data=[go.Table(
                align='left'))
 ])
 
-st.plotly_chart(fig)
+st.plotly_chart(fig, use_container_width=True)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
 #st.dataframe(df_full)
@@ -96,4 +96,4 @@ fig_full = go.Figure(data=[go.Table(
                align='left'))
 ])
 
-st.plotly_chart(fig_full)
+st.plotly_chart(fig_full, use_container_width=True)
