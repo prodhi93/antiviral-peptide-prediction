@@ -93,5 +93,6 @@ fig_full = go.Figure(data=[go.Table(
     cells=dict(values=[df_full["Sequence"], df_full["Predicted Antiviral Probability"], df_full["Possible Antiviral?"]],
                fill_color='lavender',
                align='left'))
+])
 
 st.plotly_chart(fig_full)
