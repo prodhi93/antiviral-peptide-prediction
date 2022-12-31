@@ -99,10 +99,10 @@ df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].appl
 
 st.subheader(f"Using model trained on {synth_type} Peptides")
 #st.dataframe(df)
-AgGrid(df)
+#AgGrid(df)
 customise_aggrid_df(df)
 
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
 #st.dataframe(df_full)
-AgGrid(df_full)
+#AgGrid(df_full)
 customise_aggrid_df(df_full)
