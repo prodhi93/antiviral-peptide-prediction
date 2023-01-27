@@ -159,12 +159,33 @@ amp["AROMATICITY"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).ar
 amp["ALIPHATIC INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).aliphatic_index())
 amp["BOMAN INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).boman_index())
 
-amp.to_csv('cleaned_amp.csv')
+amp["CYSTEINE COUNT"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).cysteine_count())
+amp["POLARITY"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).polarity())
+amp["H-BONDING"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).h_bonding())
+amp["BULKY PROPERTIES"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).bulky_properties())
+amp["COMPOSITIONAL CHARACTERISTIC INDEX"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).compositional_char_index())
+amp["LOCAL FLEXIBILITY"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).local_flexibility())
+amp["ELECTRONIC PROPERTIES"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).electronic_props())
+amp["HELIX BEND PREFERENCE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).helix_bend_pref())
+amp["SIDE CHAIN SIZE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).side_chain_size())
+amp["EXTENDED STRUCTURAL PREFERENCE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).ext_struct_pref())
+amp["DOUBLE BEND PREFERENCE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).double_bend_pref())
+amp["PARTIAL SPECIFIC VOLUME"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).partial_specific_volume())
+amp["FLAT EXTENDED PREFERENCE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).flat_extended_pref())
+amp["pK-C"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).pK_C())
+amp["MS-WHIM-1 SCORE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).ms_whim_scores()[0])
+amp["MS-WHIM-2 SCORE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).ms_whim_scores()[1])
+amp["MS-WHIM-3 SCORE"] = amp["SEQUENCE"].apply(lambda x: peptide_class.Peptide(x).ms_whim_scores()[2])
 
+amp.to_json('cleaned_amp.json')
+
+if 'Unnamed: 0' in amp.columns:
+       amp.drop('Unnamed: 0', axis=1, inplace=True)
+       
 # Create two distinct datasets separated by ribosomal vs synthetic peptides
 
 amp_ribosomal = amp[amp["SYNTHESIS TYPE"] == "Ribosomal"]
-amp_ribosomal.to_csv("amp_ribosomal.csv")
+amp_ribosomal.to_json("amp_ribosomal.json")
 
 amp_synthetic = amp[amp["SYNTHESIS TYPE"] == "Synthetic"]
-amp_synthetic.to_csv("amp_synthetic.csv")
+amp_synthetic.to_json("amp_synthetic.json")
