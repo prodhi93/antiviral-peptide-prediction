@@ -12,6 +12,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense,Dropout
 from tensorflow.keras.callbacks import EarlyStopping
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, confusion_matrix
 
@@ -125,12 +126,33 @@ class PeptideTrainer:
             print(f"Saving model with filename '{self.upsample_method}_rfc_model_AV_{time_now}.joblib'")
             dump(rfc, f"{self.upsample_method}_rfc_model_AV_{time_now}.joblib")
         return rfc
-    
-    def train_model(self):
-        if self.num_features > 15:
-            self.train_nn_model()
+
+    def train_svm_model(self, inplace=True, save_model=True):
+        if self.do_even_sampling:
+            [X_train, X_test, y_train, y_test] = self.train_test_set if \
+                                                all([val is not None for val in self.train_test_set]) \
+                                                    else self.even_sampling()
         else:
-            self.train_rfc_model()
+            [X_train, X_test, y_train, y_test] = self.train_test_set if \
+                                                all([val is not None for val in self.train_test_set]) \
+                                                    else self.prep_train_test_data()
+        param_grid = {'C': [0.1,1, 10, 50, 100], 'gamma': [1,0.1, 0.05,0.01,0.001],'kernel': ['rbf', 'poly', 'sigmoid']}
+        # Create an svc based model
+        svc_estimator = SVC()
+        # Instantiate the grid search model
+        grid_search = GridSearchCV(estimator = svc_estimator, param_grid = param_grid, 
+                          cv = 3, n_jobs = -1, verbose = 1)
+        grid_search.fit(X_train, y_train)
+        svc = grid_search.best_estimator_
+        svc.fit(X_train, y_train)
+        if inplace:
+            self.model = svc
+            self.model_type = "svc"
+        if save_model:
+            time_now = str(datetime.now()) 
+            print(f"Saving model with filename '{self.upsample_method}_svc_model_AV_{time_now}.joblib'")
+            dump(svc, f"{self.upsample_method}_svc_model_AV_{time_now}.joblib")
+        return svc
             
     def evaluate_model(self, show_plots=True):
         if self.do_even_sampling:
@@ -145,7 +167,7 @@ class PeptideTrainer:
         model = self.train_model() if self.model is None else self.model
         if self.model_type == "nn":
             pred = np.where(model.predict(X_test) > 0.5, 1, 0)
-        elif self.model_type == "rfc":
+        elif self.model_type == "rfc" or self.model_type == "svc":
             pred = model.predict(X_test)
         
         if self.upsample_method == "smote":
