@@ -164,7 +164,9 @@ class PeptideTrainer:
                                                 all([val is not None for val in self.train_test_set]) \
                                                     else self.prep_train_test_data()
                     
-        model = self.train_model() if self.model is None else self.model
+        assert self.model is not None, "No model has been trained yet. Train a model first prior to evaluation."
+        
+        model = self.model
         if self.model_type == "nn":
             pred = np.where(model.predict(X_test) > 0.5, 1, 0)
         elif self.model_type == "rfc" or self.model_type == "svc":
