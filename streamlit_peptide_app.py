@@ -34,9 +34,12 @@ def extract_seq_data(sequence):
     pep = Peptide(str(sequence))
     data = np.array([pep.percent_helix(), pep.aromaticity(), pep.percent_sheet(), pep.aliphatic_index(),
               pep.hydrophobic_moment(), pep.percent_turn(), pep.boman_index(), pep.instability_index(),
-              pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge()]).reshape(1, -1) 
+              pep.isoelectric_point(), pep.charge_density(), pep.sequence_charge(), pep.cysteine_count(),
+              pep.polarity(), pep.h_bonding(), pep.bulky_properties(), pep.compositional_char_index(),
+              pep.local_flexibility(), pep.electronic_props(), pep.helix_bend_pref(), pep.side_chain_size(),
+              pep.ext_struct_pref(), pep.double_bend_pref(), pep.partial_specific_volume(), pep.flat_extended_pref(),
+              pep.pK_C(), pep.ms_whim_scores()[0], pep.ms_whim_scores()[1], pep.ms_whim_scores()[2]]).reshape(1, -1) 
     return data
-
 
 def get_truncated_data(seq, model, min_length):  
     seq_list = [seq]
@@ -75,34 +78,28 @@ def customise_aggrid_df(data):
     selected = grid_response['selected_rows'] 
     df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
     return df
-    
-rfc_full = model_loader("smote_rfc_full_model.joblib")
-if synth_type=="Ribosomal":
-    rfc = model_loader("smote_rfc_ribo_model.joblib")
-elif synth_type=="Synthetic":
-    rfc = model_loader("smote_rfc_synth_model.joblib")
 
-    
-seq_preds = get_truncated_data(seq, rfc, min_length)
+
+rfc_full = model_loader("smote_rfc_full.joblib")
+if synth_type=="Synthetic":
+    rfc_synth = model_loader("smote_rfc_synth.joblib")
+    seq_preds_synth = get_truncated_data(seq, rfc_synth, min_length) 
 seq_preds_full = get_truncated_data(seq, rfc_full, min_length)
-
+    
 
 st.header("Prediction Tables")
 
-df = pd.DataFrame(seq_preds[0], columns=["Sequence"])
-df["Predicted Antiviral Probability"] = seq_preds[2]
-df["Possible Antiviral?"] = df["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
+if synth_type=="Synthetic":
+    df = pd.DataFrame(seq_preds_synth[0], columns=["Sequence"])
+    df["Predicted Antiviral Probability"] = seq_preds_synth[2]
+    df["Possible Antiviral?"] = df["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
+
+    st.subheader(f"Using model trained on {synth_type} Peptides")
+    customise_aggrid_df(df)
 
 df_full = pd.DataFrame(seq_preds_full[0], columns=["Sequence"])
 df_full["Predicted Antiviral Probability"] = seq_preds_full[2]
 df_full["Possible Antiviral?"] = df_full["Predicted Antiviral Probability"].apply(lambda x: "Yes" if x > threshold else "No" )
 
-st.subheader(f"Using model trained on {synth_type} Peptides")
-#st.dataframe(df)
-#AgGrid(df)
-customise_aggrid_df(df)
-
 st.subheader(f"Using model trained on both Ribosomal and Synthetic Peptides")
-#st.dataframe(df_full)
-#AgGrid(df_full)
 customise_aggrid_df(df_full)
