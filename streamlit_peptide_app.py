@@ -27,7 +27,7 @@ st.subheader("Choose the number of amino acids in the shortest truncated segment
 min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1)
 min_length = int(min_length)
 
-
+@st.cache
 def model_loader(model_name_or_path):
     model = load(str(model_name_or_path))
     return model
