@@ -18,7 +18,9 @@ synth_type = st.radio('Synthesis Type',('Ribosomal', 'Synthetic'))
 #option is stored in this variable
 
 st.subheader("Choose your threshold for positive antiviral activity")
-threshold = st.slider("Percent threshold", min_value=0.01, max_value=100.00, step=0.01)
+threshold = st.slider("Percent threshold", min_value=0.01, max_value=100.00, step=0.01, \
+                      help="With an extreme needle-in-haystack problem such as this one, positive probabilities are low despite undersampling correction.\
+                     Hint: 25% is a good starter value for positivity thresholds as the model returns probability values > 0.25 for confirmed antiviral peptides.")
 threshold = float(threshold)/100
 
 st.subheader("Choose the number of amino acids in the shortest truncated segment")
