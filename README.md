@@ -6,6 +6,9 @@ This repository contains code to clean data, select and generate features, train
 You can run the application for prediction that uses my pre-trained model here:
 https://prodhi93-antiviral-peptide-predict-streamlit-peptide-app-pm0byh.streamlit.app/
 
+## A note about requirements
+
+Please note that requirements.txt is the list of required modules needed to run the streamlit app for prediction, while requirements_full.txt contains the list of required modules if you would like to perform the full procedure (data cleaning --> feature selection and engineering --> model training) from scratch.
 
 ## File List
 
