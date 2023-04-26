@@ -28,7 +28,7 @@ with st.form(key="peptide_choices"):
     min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1)
     min_length = int(min_length)
     
-    st.form_submit_button("Enter")
+    submit_button = st.form_submit_button("Enter")
 
 @st.cache(allow_output_mutation=True)
 def model_loader(model_name_or_path):
@@ -84,7 +84,7 @@ def customise_aggrid_df(data):
     df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
     return df
 
-if form_submit_button:
+if submit_button:
     rfc_full = model_loader("smote_rfc_full.joblib")
     if synth_type=="Synthetic":
         rfc_synth = model_loader("smote_rfc_synth.joblib")
