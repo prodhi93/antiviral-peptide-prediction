@@ -9,25 +9,26 @@ from antiviral_analysis.peptide_class import Peptide
 
 st.title("Antiviral Peptide Predictor")
 
+
+st.subheader("Enter the amino acid sequence of your peptide")
+seq = st.text_input('Enter sequence', help="Please enter single-letter amino acid sequence only")
+
+#Picking which model user wants to deploy
+st.subheader("Is your peptide ribosomally synthesised (biologically occurring), or synthetic?")
+synth_type = st.radio('Synthesis Type',('Ribosomal', 'Synthetic')) 
+#option is stored in this variable
+
+st.subheader("Choose your threshold for positive antiviral activity")
+threshold = st.slider("Percent threshold", min_value=0.01, max_value=100.00, step=0.01, \
+                      help="With an extreme needle-in-haystack problem such as this one, positive probabilities are low despite undersampling correction.\
+                     Hint: 25% is a good starter value for positivity thresholds as the model returns probability values > 0.25 for confirmed antiviral peptides.")
+threshold = float(threshold)/100
+
+st.subheader("Choose the number of amino acids in the shortest truncated segment")
+min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1)
+min_length = int(min_length)
+
 with st.form(key="peptide_choices"):
-    st.subheader("Enter the amino acid sequence of your peptide")
-    seq = st.text_input('Enter sequence', help="Please enter single-letter amino acid sequence only")
-
-    #Picking which model user wants to deploy
-    st.subheader("Is your peptide ribosomally synthesised (biologically occurring), or synthetic?")
-    synth_type = st.radio('Synthesis Type',('Ribosomal', 'Synthetic')) 
-    #option is stored in this variable
-
-    st.subheader("Choose your threshold for positive antiviral activity")
-    threshold = st.slider("Percent threshold", min_value=0.01, max_value=100.00, step=0.01, \
-                          help="With an extreme needle-in-haystack problem such as this one, positive probabilities are low despite undersampling correction.\
-                         Hint: 25% is a good starter value for positivity thresholds as the model returns probability values > 0.25 for confirmed antiviral peptides.")
-    threshold = float(threshold)/100
-
-    st.subheader("Choose the number of amino acids in the shortest truncated segment")
-    min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1)
-    min_length = int(min_length)
-    
     submit_button = st.form_submit_button("Enter")
 
 @st.cache(allow_output_mutation=True)
