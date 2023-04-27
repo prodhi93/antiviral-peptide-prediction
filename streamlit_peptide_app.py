@@ -28,6 +28,13 @@ st.subheader("Choose the number of amino acids in the shortest truncated segment
 min_length = st.slider("Minimum length", min_value=1, max_value=len(seq), step=1)
 min_length = int(min_length)
 
+css = r'''
+    <style>
+        [data-testid="stForm"] {border: 0px}
+    </style>
+'''
+st.markdown(css, unsafe_allow_html=True)
+
 with st.form(key="peptide_choices"):
     submit_button = st.form_submit_button("Enter")
 
