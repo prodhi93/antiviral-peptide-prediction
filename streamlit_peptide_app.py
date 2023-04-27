@@ -10,8 +10,8 @@ from antiviral_analysis.peptide_class import Peptide
 st.title("Antiviral Peptide Predictor")
 
 with st.form(key="peptide_choices"):
-    st.subheader("Enter the amino acid sequence of your peptide", help="Please enter single-letter amino acid sequence only")
-    seq = st.text_input('Enter sequence')
+    st.subheader("Enter the amino acid sequence of your peptide")
+    seq = st.text_input('Enter sequence', help="Please enter single-letter amino acid sequence only")
 
     #Picking which model user wants to deploy
     st.subheader("Is your peptide ribosomally synthesised (biologically occurring), or synthetic?")
