@@ -85,7 +85,7 @@ def customise_aggrid_df(data):
         enable_enterprise_modules=True,
         height=350, 
         width='200%',
-        reload_data=True
+        reload_data=False
     )
 
     data = grid_response['data']
